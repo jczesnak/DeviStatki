@@ -1,0 +1,328 @@
+/* ==========================================================
+   Kreślarnia Morska
+   Klasyczny serwis wydawnictwa: białe tło, granat jako jedyny kolor marki,
+   rysunki na jasnoszarych polach. Jeden krój pisma: Public Sans.
+   ========================================================== */
+
+:root {
+    --tlo: #ffffff;
+    --tekst: #111827;
+    --tekst-jasny: #4b5563;   
+    --granat: #1b2a44;
+    --pole: #f3f4f6;          /* tło pod rysunkami */
+    --linia: #e5e7eb;
+    --zaokraglenie: 6px;
+
+    --font: "Public Sans", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    color: var(--tekst);
+    font-family: var(--font);
+    font-size: 18px;
+    line-height: 1.6;
+    background: var(--tlo);
+}
+
+a { color: inherit; text-underline-offset: 3px; }
+img { display: block; max-width: 100%; height: auto; }
+
+
+::selection { background: var(--granat); color: #fff; }
+a:focus-visible { outline: 3px solid var(--granat); outline-offset: 3px; }
+
+/* Tekst tylko dla czytnika ekranu (niewidoczny na ekranie) */
+.ukryte {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* "Przejdź do treści" – schowany nad stroną, wjeżdża po naciśnięciu Tab */
+.pomin {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 10;
+    padding: 10px 16px;
+    border-radius: var(--zaokraglenie);
+    background: var(--granat);
+    color: #fff;
+    font-weight: 600;
+}
+.pomin:focus { top: 16px; }
+
+/* Jedna szerokość kolumny dla nagłówka, treści i stopki */
+.kolumna {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* ---------- Nagłówek ---------- */
+
+.naglowek { border-bottom: 1px solid var(--linia); }
+.naglowek .kolumna {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 32px;
+    min-height: 76px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--granat);
+    font-size: 21px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.menu { display: flex; flex-wrap: wrap; gap: 4px 28px; }
+.menu a {
+    padding: 8px 0 6px;
+    border-bottom: 2px solid transparent;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.menu a:hover { color: var(--granat); }
+.menu a.aktywna { color: var(--granat); border-bottom-color: var(--granat); }
+
+/* ---------- Typografia ---------- */
+
+.tresc { padding: 48px 0 80px; }
+
+h1, h2, h3 { line-height: 1.15; text-wrap: balance; }
+h1 { margin: 0 0 16px; font-size: 48px; font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 28px; font-weight: 800; }
+h3 { font-size: 21px; font-weight: 700; }
+
+/* Linia danych wydania pod tytułem: typ · nr · data */
+.dane {
+    margin: 0 0 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--granat);
+    font-variant-numeric: tabular-nums;
+}
+
+.lead { font-size: 21px; color: var(--tekst-jasny); }
+.pusto { color: var(--tekst-jasny); }
+
+.przycisk {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: var(--zaokraglenie);
+    background: var(--granat);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.przycisk:hover { background: var(--tekst); }
+
+/* Rysunek na jasnoszarym polu; multiply "wtapia" białe tło skanu w szare pole */
+.pole-rysunku {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border-radius: var(--zaokraglenie);
+    background: var(--pole);
+}
+.pole-rysunku img { mix-blend-mode: multiply; }
+
+/* ---------- Strona główna ---------- */
+
+.czolowka {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 56px;
+    align-items: center;
+}
+/* Rysunek nie wyższy niż 65% ekranu – tytuł obok zawsze na pierwszym ekranie */
+.czolowka .pole-rysunku img { max-height: 65vh; width: auto; }
+.czolowka h1 a { text-decoration: none; }
+.czolowka h1 a:hover { color: var(--granat); }
+.czolowka .lead { margin: 0 0 24px; }
+
+/* Nagłówek sekcji z linkiem "Wszystkie" po prawej */
+.sekcja {
+    display: flex;
+    flex-wrap: wrap;   /* na telefonie link "Wszystkie wydania" schodzi pod nagłówek */
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 72px 0 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--linia);
+}
+.sekcja h2 { margin: 0; }
+.sekcja a { font-weight: 600; color: var(--granat); white-space: nowrap; }
+
+.wstep-redakcji {
+    max-width: 720px;
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--linia);
+    color: var(--tekst-jasny);
+}
+
+/* ---------- Karty wydań ---------- */
+
+.siatka {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px 32px;
+}
+
+.karta { position: relative; }
+/* Stałe proporcje pola: karty równej wysokości, rysunek w całości (bez przycinania) */
+.karta .pole-rysunku { aspect-ratio: 16 / 10; padding: 16px; margin-bottom: 16px; }
+.karta .pole-rysunku img { width: 100%; height: 100%; object-fit: contain; }
+.karta-brak { color: #9ca3af; }
+.karta h3 { margin: 0 0 4px; }
+/* Pełna nazwa .karta .dane, żeby reguła ".karta p" niżej nie zrobiła linii danych szarą */
+.karta .dane { margin: 0 0 6px; color: var(--granat); }
+.karta h3 a { text-decoration: none; }
+/* Link w tytule rozciągnięty na całą kartę – klikalna jest cała karta */
+.karta h3 a::after { content: ""; position: absolute; inset: 0; }
+.karta:hover h3 a { color: var(--granat); text-decoration: underline; }
+.karta p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--tekst-jasny); }
+/* Fokus z klawiatury na linku w tytule obrysowuje całą kartę */
+.karta:has(a:focus-visible) { outline: 3px solid var(--granat); outline-offset: 6px; border-radius: var(--zaokraglenie); }
+.karta h3 a:focus-visible { outline: none; }
+
+.dalej { margin: 40px 0 0; }
+
+/* ---------- Lista wydań: filtr i strony ---------- */
+
+.naglowek-strony { max-width: 720px; margin-bottom: 32px; }
+.naglowek-strony p { color: var(--tekst-jasny); }
+
+.filtr { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
+.filtr a {
+    padding: 8px 18px;
+    border: 1px solid var(--linia);
+    border-radius: var(--zaokraglenie);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.filtr a:hover { border-color: var(--granat); color: var(--granat); }
+.filtr a.aktywny { border-color: var(--granat); background: var(--granat); color: #fff; }
+
+.stronicowanie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--linia);
+}
+.stronicowanie a { font-weight: 600; color: var(--granat); }
+.stronicowanie-numer { font-size: 16px; color: var(--tekst-jasny); }
+
+/* ---------- Strona wydania ---------- */
+
+.okruszki { margin: 0 0 24px; font-size: 16px; color: var(--tekst-jasny); }
+.okruszki a { color: var(--granat); font-weight: 600; }
+
+.wydanie > h1 { max-width: 900px; }
+.wydanie > .pole-rysunku { margin-top: 32px; padding: 40px; }
+.wydanie > .pole-rysunku img { max-height: 80vh; width: auto; }
+.pelna-rozdzielczosc { display: inline-block; margin-top: 12px; font-size: 16px; font-weight: 600; color: var(--granat); }
+
+.tekst { max-width: 680px; }
+.wydanie .tekst { margin-top: 40px; }
+
+/* Starsze / nowsze wydanie pod treścią */
+.sasiednie {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--linia);
+}
+.sasiednie a { font-size: 21px; font-weight: 700; line-height: 1.3; text-decoration: none; }
+.sasiednie a:hover { color: var(--granat); text-decoration: underline; }
+.sasiednie small { display: block; margin-bottom: 4px; font-size: 15px; font-weight: 600; color: var(--tekst-jasny); }
+.sasiednie .starsze { text-align: right; }
+
+/* ---------- O nas ---------- */
+
+.o-nas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+}
+
+/* ---------- Stopka ---------- */
+
+.stopka {
+    padding: 48px 0 24px;
+    background: var(--granat);
+    color: #fff;
+    font-size: 16px;
+}
+.stopka-kolumny {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+}
+.stopka-nazwa { font-size: 21px; font-weight: 800; }
+.stopka h2 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+}
+.stopka p { margin: 8px 0 0; color: rgba(255, 255, 255, 0.85); }
+.stopka ul { margin: 0; padding: 0; list-style: none; }
+.stopka li { margin-bottom: 6px; }
+.stopka a { text-decoration: none; }
+.stopka a:hover { text-decoration: underline; }
+.stopka a:focus-visible { outline-color: #fff; }
+.stopka .stopka-prawa {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 900px) {
+    .czolowka, .o-nas { grid-template-columns: 1fr; gap: 28px; }
+    .czolowka .pole-rysunku img { max-height: 50vh; }
+}
+
+/* ---------- Telefon ---------- */
+
+@media (max-width: 640px) {
+    .kolumna { padding: 0 16px; }
+    .naglowek .kolumna { padding-top: 12px; padding-bottom: 8px; }
+    .tresc { padding: 28px 0 56px; }
+    h1 { font-size: 34px; }
+    .lead { font-size: 18px; }
+    .sekcja, .wstep-redakcji { margin-top: 48px; }
+    .wydanie > .pole-rysunku { padding: 16px; }
+    .sasiednie { grid-template-columns: 1fr; }
+    .sasiednie .starsze { text-align: left; }
+    .stopka-kolumny { grid-template-columns: 1fr; gap: 24px; }
+}

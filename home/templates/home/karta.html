@@ -1,0 +1,19 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+{# Karta jednego wydania – używana na stronie głównej i na liście wydań #}
+{# Link jest tylko na tytule (krótka nazwa dla czytnika ekranu), a CSS rozciąga go na całą kartę #}
+<article class="karta">
+    <div class="pole-rysunku">
+        {% if wydanie.okladka %}
+            {# max- zamiast fill-: rysunek nie jest przycinany, widać cały kadłub od dziobu do rufy #}
+            {% image wydanie.okladka max-600x360 alt="" %}
+        {% else %}
+            {# Zastępcza sylwetka statku, gdy wydanie nie ma okładki #}
+            <svg class="karta-brak" viewBox="0 0 64 32" width="120" height="60" aria-hidden="true">
+                <path d="M2 20 H62 L54 29 H8 Z M16 20 V14 H40 V20 M22 14 V10 H34 V14 M28 10 V3" fill="none" stroke="currentColor" stroke-width="1"/>
+            </svg>
+        {% endif %}
+    </div>
+    <h3><a href="{% pageurl wydanie %}">{{ wydanie.title }}</a></h3>
+    <p class="dane">{{ wydanie.get_typ_display }}{% if wydanie.numer %} · nr {{ wydanie.numer }}{% endif %} · {{ wydanie.data|date:"d.m.Y" }}</p>
+    {% if wydanie.zajawka %}<p>{{ wydanie.zajawka }}</p>{% endif %}
+</article>

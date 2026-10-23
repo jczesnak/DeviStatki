@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+
+# --- Środowisko wirtualne (każdy tworzy własne z requirements.txt) ---
+.venv/
+venv/
+
+# --- Dane lokalne Django / Wagtaila ---
+# Baza SQLite i wgrane pliki są inne na każdym komputerze.
+# Przykładowe dane odtwarza polecenie: python manage.py zaladuj_przyklady
+db.sqlite3
+*.sqlite3
+media/
+# Wynik "collectstatic" – generowany automatycznie
+/static/
+
+# --- Sekrety i ustawienia lokalne ---
+.env
+kreslarnia/settings/local.py
+
+# --- Narzędzia i edytory ---
+.impeccable/
+DESIGN.md
+PRODUCT.md
+.vscode/
+.idea/
+.claude/
+
+# --- System ---
+.DS_Store
+Thumbs.db
+*.log

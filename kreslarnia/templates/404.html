@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block title %}Nie znaleziono strony{% endblock %}
+
+{% block content %}
+<section class="naglowek-strony">
+    <h1>Nie znaleziono strony</h1>
+    <p>Ta strona nie istnieje albo została przeniesiona.</p>
+    <a class="przycisk" href="{% pageurl site.root_page %}">Wróć na stronę główną</a>
+</section>
+{% endblock %}

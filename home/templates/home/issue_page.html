@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<article class="wydanie">
+    {# Drugi człon ścieżki prowadzi do listy wydań przefiltrowanej po typie tego wydania #}
+    <p class="okruszki"><a href="{% pageurl page.get_parent %}">{{ page.get_parent.title }}</a> / <a href="{% pageurl page.get_parent %}?typ={{ page.typ }}">{{ page.get_typ_display }}</a></p>
+
+    <h1>{{ page.title }}</h1>
+    <p class="dane">{{ page.get_typ_display }}{% if page.numer %} · nr {{ page.numer }}{% endif %} · {{ page.data|date:"d.m.Y" }}</p>
+    {% if page.zajawka %}<p class="lead tekst">{{ page.zajawka }}</p>{% endif %}
+
+    {% if page.okladka %}
+    <div class="pole-rysunku">
+        {% image page.okladka width-1200 alt=page.title %}
+    </div>
+    {# Link do oryginalnego pliku – modelarz może obejrzeć detale w pełnej rozdzielczości #}
+    <a class="pelna-rozdzielczosc" href="{{ page.okladka.file.url }}">Otwórz rysunek w pełnej rozdzielczości</a>
+    {% endif %}
+
+    <div class="tekst">
+        {{ page.opis|richtext }}
+        {% if page.link %}
+            <a class="przycisk" href="{{ page.link }}" target="_blank" rel="noopener">{{ page.napis_linku }}<span class="ukryte"> (otwiera nową kartę)</span></a>
+        {% endif %}
+    </div>
+
+    {% if starsze or nowsze %}
+    <nav class="sasiednie" aria-label="Sąsiednie wydania">
+        {% if nowsze %}
+            <a href="{% pageurl nowsze %}"><small>Nowsze wydanie</small>{{ nowsze.title }}</a>
+        {% else %}<span></span>{% endif %}
+        {% if starsze %}
+            <a class="starsze" href="{% pageurl starsze %}"><small>Starsze wydanie</small>{{ starsze.title }}</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+</article>
+{% endblock %}

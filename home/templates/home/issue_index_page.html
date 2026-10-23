@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<section class="naglowek-strony">
+    <h1>{{ page.title }}</h1>
+    {{ page.wstep|richtext }}
+</section>
+
+{# Filtr po typie: zwykłe linki z parametrem ?typ=, bez JavaScriptu #}
+<nav class="filtr" aria-label="Filtruj według typu">
+    <a href="{% pageurl page %}"{% if not wybrany_typ %} class="aktywny" aria-current="page"{% endif %}>Wszystkie</a>
+    {% for wartosc, nazwa in typy %}
+        <a href="{% pageurl page %}?typ={{ wartosc }}"{% if wybrany_typ == wartosc %} class="aktywny" aria-current="page"{% endif %}>{{ nazwa }}</a>
+    {% endfor %}
+</nav>
+
+{% if wydania.object_list %}
+<div class="siatka">
+    {% for wydanie in wydania %}
+        {% include "home/karta.html" %}
+    {% endfor %}
+</div>
+
+{% if wydania.has_other_pages %}
+{# Linki zachowują wybrany typ, żeby przejście na kolejną stronę nie zerowało filtra #}
+<nav class="stronicowanie" aria-label="Strony listy wydań">
+    {% if wydania.has_previous %}
+        <a href="?{% if wybrany_typ %}typ={{ wybrany_typ }}&amp;{% endif %}strona={{ wydania.previous_page_number }}">Nowsze</a>
+    {% else %}<span></span>{% endif %}
+    <span class="stronicowanie-numer">Strona {{ wydania.number }} z {{ wydania.paginator.num_pages }}</span>
+    {% if wydania.has_next %}
+        <a href="?{% if wybrany_typ %}typ={{ wybrany_typ }}&amp;{% endif %}strona={{ wydania.next_page_number }}">Starsze</a>
+    {% else %}<span></span>{% endif %}
+</nav>
+{% endif %}
+{% elif wybrany_typ %}
+<p class="pusto">Brak wydań tego typu. <a href="{% pageurl page %}">Pokaż wszystkie wydania</a>.</p>
+{% else %}
+<p class="pusto">Pierwsze wydanie już wkrótce.</p>
+{% endif %}
+{% endblock %}

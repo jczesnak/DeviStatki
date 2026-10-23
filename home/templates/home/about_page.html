@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+
+<div class="o-nas">
+    <div class="tekst">{{ page.tresc|richtext }}</div>
+    {% if page.zdjecie %}
+    <div class="pole-rysunku">
+        {% image page.zdjecie width-700 alt="" %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

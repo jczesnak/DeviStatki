@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+{% if aktualne %}
+{# Najnowsze wydanie jako główny materiał: rysunek po lewej, opis po prawej #}
+<article class="czolowka">
+    {# Cały rysunek jest klikalny jak zdjęcie głównego materiału w portalu; pominięty przy Tab, bo tytuł prowadzi tam samo #}
+    <a class="pole-rysunku" href="{% pageurl aktualne %}" tabindex="-1" aria-hidden="true">
+        {% if aktualne.okladka %}
+            {% image aktualne.okladka width-1200 alt="" %}
+        {% else %}
+            <svg class="karta-brak" viewBox="0 0 64 32" width="200" height="100">
+                <path d="M2 20 H62 L54 29 H8 Z M16 20 V14 H40 V20 M22 14 V10 H34 V14 M28 10 V3" fill="none" stroke="currentColor" stroke-width="1"/>
+            </svg>
+        {% endif %}
+    </a>
+    <div>
+        <h1><a href="{% pageurl aktualne %}">{{ aktualne.title }}</a></h1>
+        <p class="dane">Najnowsze wydanie · {{ aktualne.get_typ_display }} · {{ aktualne.data|date:"d.m.Y" }}</p>
+        {% if aktualne.zajawka %}<p class="lead">{{ aktualne.zajawka }}</p>{% endif %}
+        <a class="przycisk" href="{% pageurl aktualne %}">Zobacz wydanie</a>
+    </div>
+</article>
+{% else %}
+<h1>{{ site.site_name }}</h1>
+<p class="pusto">Pierwsze wydanie już wkrótce.</p>
+{% endif %}
+
+{% if poprzednie %}
+<div class="sekcja">
+    <h2>Poprzednie wydania</h2>
+    {% if lista_wydan %}<a href="{% pageurl lista_wydan %}">Wszystkie wydania</a>{% endif %}
+</div>
+<div class="siatka">
+    {% for wydanie in poprzednie %}
+        {% include "home/karta.html" %}
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if page.wstep %}
+<div class="wstep-redakcji">{{ page.wstep|richtext }}</div>
+{% endif %}
+{% endblock %}

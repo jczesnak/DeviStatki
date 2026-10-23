@@ -1,0 +1,91 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+{# Jedno źródło nazwy serwisu: site.site_name (ustawiane w migracji z WAGTAIL_SITE_NAME) #}
+{% wagtail_site as site %}
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}{% endblock %} – {{ site.site_name }}</title>
+        {% if page.search_description %}
+        <meta name="description" content="{{ page.search_description }}" />
+        {% endif %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# W podglądzie panelu admina linki otwieramy w nowej karcie #}
+        {% if request.in_preview_panel %}
+        <base target="_blank">
+        {% endif %}
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&display=swap">
+        <link rel="stylesheet" href="{% static 'css/kreslarnia.css' %}">
+    </head>
+
+    <body>
+        {% wagtailuserbar %}
+
+        {# Link dla klawiatury i czytnika ekranu: pozwala pominąć menu (widoczny dopiero po Tab) #}
+        <a class="pomin" href="#tresc">Przejdź do treści</a>
+
+        <header class="naglowek">
+            <div class="kolumna">
+                <a class="logo" href="{% pageurl site.root_page %}">
+                    {# Prosta sylwetka statku w rzucie bocznym #}
+                    <svg viewBox="0 0 64 32" width="48" height="24" aria-hidden="true">
+                        <path d="M2 20 H62 L54 29 H8 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 20 V14 H40 V20 M22 14 V10 H34 V14 M28 10 V3" fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    {{ site.site_name }}
+                </a>
+
+                <nav class="menu" aria-label="Menu główne">
+                    {# Pierwsza pozycja to zawsze strona główna, kolejne – jej podstrony z "Pokaż w menu" #}
+                    <a href="{% pageurl site.root_page %}"
+                       class="{% if page.id == site.root_page.id %}aktywna{% endif %}"
+                       {% if page.id == site.root_page.id %}aria-current="page"{% endif %}>Strona główna</a>
+                    {# Rodzica liczymy raz (jedno zapytanie), a nie w każdym obrocie pętli #}
+                    {% with rodzic_id=page.get_parent.id %}
+                    {% for pozycja in site.root_page.get_children.live.in_menu %}
+                        <a href="{% pageurl pozycja %}"
+                           class="{% if page.id == pozycja.id or rodzic_id == pozycja.id %}aktywna{% endif %}"
+                           {% if page.id == pozycja.id or rodzic_id == pozycja.id %}aria-current="page"{% endif %}>{{ pozycja.title }}</a>
+                    {% endfor %}
+                    {% endwith %}
+                </nav>
+            </div>
+        </header>
+
+        <main class="tresc" id="tresc">
+            <div class="kolumna">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        {# Klasyczna stopka: o serwisie, nawigacja, kontakt + pasek z prawami autorskimi #}
+        <footer class="stopka">
+            <div class="kolumna">
+                <div class="stopka-kolumny">
+                    <div>
+                        <strong class="stopka-nazwa">{{ site.site_name }}</strong>
+                        <p>Gazety, filmy i rysunki o statkach – od drewnianych szkunerów po współczesne jednostki.</p>
+                    </div>
+                    <div>
+                        <h2>Nawigacja</h2>
+                        <ul>
+                            <li><a href="{% pageurl site.root_page %}">Strona główna</a></li>
+                            {% for pozycja in site.root_page.get_children.live.in_menu %}
+                                <li><a href="{% pageurl pozycja %}">{{ pozycja.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div>
+                        <h2>Kontakt</h2>
+                        <p><a href="mailto:redakcja@example.com">redakcja@example.com</a></p>
+                    </div>
+                </div>
+                <p class="stopka-prawa">© {% now "Y" %} {{ site.site_name }}. Źródło każdej ilustracji podajemy przy wydaniu.</p>
+            </div>
+        </footer>
+    </body>
+</html>
